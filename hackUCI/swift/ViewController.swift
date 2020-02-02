@@ -7,21 +7,26 @@
 //
 
 import UIKit
-
+import Foundation
 
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,  UISearchBarDelegate {
     
-    
+
     @IBOutlet weak var tableView: UITableView!
 
-    var myAllergies = ["milk", "egg", "peanuts"]
+    var repo = Repository()
+    var myAllergies = [String]()
+
     var newItem = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addItem()
+        //addItem()
+        if let loadedAllergies = repo.load(key: "allergies"){
+            myAllergies = loadedAllergies as! [String]
+        }
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -44,6 +49,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (segue.identifier == "item") {
             let dest = segue.destination as! addItem
             dest.vc = self
+        } else if (segue.identifier == "swipeLeft") {
+            let dest = segue.destination as! scanVC
+            dest.allergies = myAllergies
         }
     }
     
@@ -54,14 +62,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func addItem(){
         if self.newItem != "" {
             myAllergies.append(newItem)
+            repo.save(key:"allergies",value:myAllergies)
         }
     }
     
     func button(){
         //custom button that displays over the tableView
         var addItemBtn = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width / 2 + 95, y: self.view.frame.size.height - 120), size: CGSize(width: 70, height: 70)))
-        addItemBtn.backgroundColor = UIColor.blue
+        addItemBtn.backgroundColor = UIColor.white
         addItemBtn.addTarget(self, action: #selector(touchBtn), for: .touchUpInside)
+        addItemBtn.setTitleColor(.black, for: .normal)
         addItemBtn.setTitle("+", for: .normal)
         addItemBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         addItemBtn.layer.cornerRadius = 25
@@ -80,21 +90,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let item = myAllergies[indexPath.row]
 
             cell?.textLabel?.text = myAllergies[indexPath.row]
+//        cell?.textLabel?.backgroundColor = UIColor.green 
         return cell!
     }
     
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == UITableViewCell.EditingStyle.delete {
-//            myAllergies.remove(at: indexPath.row)
-//            tableView.reloadData()
-//        }
-//    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            myAllergies.remove(at: indexPath.row)
+            tableView.reloadData()
+            repo.save(key:"allergies",value:myAllergies)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
         
     }
+    
+    
 }
 
 

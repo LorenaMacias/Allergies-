@@ -6,6 +6,7 @@
 //  Copyright © 2020 AWSStudent. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UISearchBarDelegate {
@@ -13,7 +14,8 @@ class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UI
     var vc: ViewController?
     
     var searchItem = [String]()
-    var allergies = ["milk", "egg", "nuts", "peanuts", "shellfish", "wheat", "soy", "fish"]
+    var allergies = [String]()
+
     
     var searching = false
     
@@ -23,12 +25,16 @@ class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UI
     var itemName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        get()
         
+        if vc!.repo.load(key: "allergies") != nil{
+            allergies = vc!.repo.load(key:"allergies") as! [String]
+        }
+
 //        self.searchItem.delegate = self
         self.itemsVC.delegate = self
         self.itemsVC.dataSource = self
         self.itemsVC.reloadData()
-        get()
 
     }
     
@@ -42,7 +48,23 @@ class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UI
                      print("statusCode: \(response.statusCode)")
                  }
                  if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                     print("data: \(dataString)")
+                     print(dataString)
+//
+//                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
+//                    if let changeLater = json as? [String: Any] {
+//                                           if let ingredients = changeLater["data"] as? String {
+//                                                   print("ingredients: \(ingredients)")
+//
+//
+                        self.allergies = dataString.components(separatedBy: ",")
+                        print(self.allergies)
+                        
+                        DispatchQueue.main.async{
+                            self.itemsVC.reloadData()
+                        }
+//                        }
+//                    }
+                    
                  }
              }
          }
@@ -92,6 +114,7 @@ class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UI
             else{
                 vc!.myAllergies.append(searchItem[indexPath.row])
                 vc!.tableView.reloadData()
+                vc!.repo.save(key:"allergies", value:vc!.myAllergies)
                 navigationController?.popViewController(animated: true)
             }
            
@@ -103,17 +126,18 @@ class addItem: UIViewController, UITableViewDataSource, UITableViewDelegate,  UI
             }
             else{
                 vc!.myAllergies.append(allergies[indexPath.row])
-                           vc!.tableView.reloadData()
-                           navigationController?.popViewController(animated: true)
+                vc!.tableView.reloadData()
+                vc!.repo.save(key:"allergies", value:vc!.myAllergies)
+                navigationController?.popViewController(animated: true)
             }
         }
 //        performSegue(withIdentifier: "segItem", sender: self)
     }
-    
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var vc = segue.destination as! ViewController
         vc.newItem = self.itemName
-    }
+    }*/
 }
 
 extension UIViewController{

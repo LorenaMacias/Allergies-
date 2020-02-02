@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C17E50123E6D0B000823B54 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17E50023E6D0AF00823B54 /* Repository.swift */; };
 		5C19082823E5773100E6C264 /* scanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19082723E5773100E6C264 /* scanVC.swift */; };
 		5C19082C23E58E2A00E6C264 /* addItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19082B23E58E2A00E6C264 /* addItem.swift */; };
 		5C19082E23E5EA1B00E6C264 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19082D23E5EA1B00E6C264 /* CustomCell.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5C17E50023E6D0AF00823B54 /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repository.swift; path = ../../../../Downloads/Repository.swift; sourceTree = "<group>"; };
 		5C19082723E5773100E6C264 /* scanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scanVC.swift; sourceTree = "<group>"; };
 		5C19082B23E58E2A00E6C264 /* addItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addItem.swift; sourceTree = "<group>"; };
 		5C19082D23E5EA1B00E6C264 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 		5C19082F23E603DB00E6C264 /* swift */ = {
 			isa = PBXGroup;
 			children = (
+				5C17E50023E6D0AF00823B54 /* Repository.swift */,
 				5C19082723E5773100E6C264 /* scanVC.swift */,
 				5C19082B23E58E2A00E6C264 /* addItem.swift */,
 				5CAE1FC623E554260035838D /* ViewController.swift */,
@@ -168,6 +171,7 @@
 			files = (
 				5CAE1FC723E554260035838D /* ViewController.swift in Sources */,
 				5C19083223E6045600E6C264 /* CustomTableViewCell.swift in Sources */,
+				5C17E50123E6D0B000823B54 /* Repository.swift in Sources */,
 				5C19082C23E58E2A00E6C264 /* addItem.swift in Sources */,
 				5C19082823E5773100E6C264 /* scanVC.swift in Sources */,
 				5CAE1FC323E554260035838D /* AppDelegate.swift in Sources */,
