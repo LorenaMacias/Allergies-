@@ -9,14 +9,17 @@
 import UIKit
 import Foundation
 
-class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITableViewDataSource, UITableViewDelegate,  UISearchBarDelegate {
 
     @IBOutlet weak var textLable: UILabel!
     
     @IBOutlet weak var imageView: UIImageView!
     //if user clicks on button then camera is activated
+    @IBOutlet weak var tableView: UITableView!
     
     var imagePicker: UIImagePickerController!
+    
+    var ingredient = [String]()
     
     var allergies: [String]?
     
@@ -24,12 +27,14 @@ class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerCon
         super.viewDidLoad()
         imageView.isHidden = true
     
-        view.backgroundColor = UIColor.green
         textLable.sizeToFit()
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
+        
+        tableView.delegate = self
+        tableView.dataSource = self 
         
         present(imagePicker, animated: true, completion: nil)
 //        post()
@@ -45,6 +50,10 @@ class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerCon
         imageView.image = info[.originalImage] as? UIImage
         
         post()
+        
+        self.tableView.delegate = self as! UITableViewDelegate
+        self.tableView.dataSource = self as! UITableViewDataSource
+        self.tableView.reloadData()
     }
     
      func post(){
@@ -106,25 +115,27 @@ class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerCon
                                 print("ingredients: \(ingredients)")
                             
                             
-                            var ingredient = ingredients.components(separatedBy: ",")
-                            print(ingredient)
+                            self.ingredient = ingredients.components(separatedBy: ",")
+                            print(self.ingredient)
                             
                             //if allergens are found in ingredients
-                            if ingredient.count > 0 && ingredient[0] != "" {
+                            if self.ingredient.count > 0 && self.ingredient[0] != "" {
                                
                                 DispatchQueue.main.async {
                                     print("not safe")
-                                 self.view.backgroundColor = UIColor.red
-                                self.textLable.text = "Sorry, you cannot eat this"
+                                    self.textLable.text = "You CAN'T eat this because it contains:"
+                                    self.textLable.textColor = UIColor(red: 239/256, green: 83/256, blue: 80/256, alpha: 1.0)
                                     self.textLable.isHidden = false
+                                    self.tableView.reloadData()
+
                                 }
                             }
                             //else, no alergens found
                             else{
                                 DispatchQueue.main.async{
                                 print("safe to eat")
-                                self.textLable.text = "Safe to eat!"
-                                    self.textLable.isHidden = false
+                                    self.textLable.textColor = UIColor(red: 102/256, green: 187/256, blue: 106/256, alpha: 1.0);                self.textLable.text = "You CAN eat this"
+                                self.textLable.isHidden = false
 
                                     
                             }
@@ -164,8 +175,21 @@ class scanVC: UIViewController, UINavigationControllerDelegate, UIImagePickerCon
         
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ingredient.count
+        }
+
+        func tableView (_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+            
+               let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+                let item = ingredient[indexPath.row]
+                cell?.textLabel?.text = ingredient[indexPath.row]
+            
+               return cell!
+           }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var vc = segue.destination as! scanVC
+        var vc = segue.destination as! ViewController
     }
     
 }
@@ -182,3 +206,31 @@ extension String {
                 return Data(self.utf8).base64EncodedString()
         }
 }
+
+//extension UIColor {
+//    public convenience init?(hex: String) {
+//        let r, g, b, a: CGFloat
+//
+//        if hex.hasPrefix("#") {
+//            let start = hex.index(hex.startIndex, offsetBy: 1)
+//            let hexColor = String(hex[start...])
+//
+//            if hexColor.count == 8 {
+//                let scanner = Scanner(string: hexColor)
+//                var hexNumber: UInt64 = 0
+//
+//                if scanner.scanHexInt64(&hexNumber) {
+//                    r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
+//                    g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
+//                    b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
+//                    a = CGFloat(hexNumber & 0x000000ff) / 255
+//
+//                    self.init(red: r, green: g, blue: b, alpha: a)
+//                    return
+//                }
+//            }
+//        }
+//
+//        return nil
+//    }
+//}

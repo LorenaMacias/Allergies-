@@ -68,13 +68,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func button(){
         //custom button that displays over the tableView
-        var addItemBtn = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width / 2 + 95, y: self.view.frame.size.height - 120), size: CGSize(width: 70, height: 70)))
+        var addItemBtn = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width / 2 + 95, y: self.view.frame.size.height - 130), size: CGSize(width: 70, height: 70)))
         addItemBtn.backgroundColor = UIColor.white
         addItemBtn.addTarget(self, action: #selector(touchBtn), for: .touchUpInside)
         addItemBtn.setTitleColor(.black, for: .normal)
         addItemBtn.setTitle("+", for: .normal)
         addItemBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
-        addItemBtn.layer.cornerRadius = 25
+        addItemBtn.layer.cornerRadius = 35
         addItemBtn.clipsToBounds = true
         //add the button
         self.view.addSubview(addItemBtn)
@@ -111,6 +111,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
 }
+
+//extension UIColor {
+//    public convenience init?(hex: String) {
+//        let r, g, b, a: CGFloat
+//
+//        if hex.hasPrefix("#") {
+//            let start = hex.index(hex.startIndex, offsetBy: 1)
+//            let hexColor = String(hex[start...])
+//
+//            if hexColor.count == 8 {
+//                let scanner = Scanner(string: hexColor)
+//                var hexNumber: UInt64 = 0
+//
+//                if scanner.scanHexInt64(&hexNumber) {
+//                    r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
+//                    g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
+//                    b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
+//                    a = CGFloat(hexNumber & 0x000000ff) / 255
+//
+//                    self.init(red: r, green: g, blue: b, alpha: a)
+//                    return
+//                }
+//            }
+//        }
+//
+//        return nil
+//    }
+//}
 
 
 
